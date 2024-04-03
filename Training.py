@@ -14,13 +14,12 @@ import os
 import matplotlib.pyplot as plt
 
 l1_loss_values = []
-Results = "Results/MixedL150/" #Change here depending on what kind of corruption you are fixing
+Results = "Results/MixedL150/"
 
 
-def train_function(disc, gen, loader, opt_disc, opt_gen, l1, bce, g_scaler, d_scaler, val_loader):#val_loader is added
+def train_function(disc, gen, loader, opt_disc, opt_gen, l1, bce, g_scaler, d_scaler, val_loader):
     loop = tqdm (loader, leave = True)
     
-    # Try including train and loop in main()
     for idx, (x, y) in enumerate (loop):
         x, y = x.to(Config.DEVICE), y.to(Config.DEVICE)
         #Training Discriminator
@@ -49,9 +48,7 @@ def train_function(disc, gen, loader, opt_disc, opt_gen, l1, bce, g_scaler, d_sc
             
             ####For printing l1 loss
             l1_loss_values.append(L1.item())
-            
-            # for i in range(len(l1_loss_values)):
-            #     l1_loss_values[i] /= Config.L1_Lambda
+
             
            
         opt_gen.zero_grad()
@@ -69,9 +66,8 @@ def main():
     #Loss
     BCE = nn.BCEWithLogitsLoss()
     L1_LOSS = nn.L1Loss()
-    #print loss during training and plot; g_l1_loss_tracker = g_l1_loss_tracker + l1.item()
-    #g_l1_loss_tracker = g_l1_loss_tracker / (l1_lambda * n_batches)
-        
+
+    
     if Config.load_model:
         load_checkpoint(Config.checkpoint_generator, gen, opt_gen, Config.lr)
         load_checkpoint(Config.checkpoint_discriminator, disc, opt_disc, Config.lr)
@@ -79,8 +75,7 @@ def main():
         #Printing directory of checkpoint
         generator_checkpoint_dir = load_checkpoint(Config.checkpoint_generator, gen, opt_gen, Config.lr)
         discriminator_checkpoint_dir = load_checkpoint(Config.checkpoint_discriminator, disc, opt_disc, Config.lr)
-        #print(f"Discriminator path: {discriminator_checkpoint_dir}")
-        #print(f"Generator path: {generator_checkpoint_dir}")
+       
             
     train_dataset = SchlierenDataset(root_dir_corrupt = Config.TRAIN_DIR, root_dir_target = Config.VAL_DIR) 
     train_dataloader = DataLoader(train_dataset, batch_size = Config.batch_size, shuffle = True, num_workers= Config.num_workers)
@@ -91,13 +86,10 @@ def main():
     
         
     for epochs in range(Config.num_epochs):
-        train_function(disc, gen, train_dataloader, opt_disc, opt_gen, L1_LOSS, BCE, g_scaler, d_scaler, val_loader) #added val_loader
+        train_function(disc, gen, train_dataloader, opt_disc, opt_gen, L1_LOSS, BCE, g_scaler, d_scaler, val_loader) 
             
             
-        if Config.save_model and epochs %10 == 0:#%10
-            #print(f"Discriminator path : {checkpoint_discriminator}")
-            #print(f"Generator path : {checkpoint_generator}")
-            
+        if Config.save_model and epochs %10 == 0: 
             save_some_examples(gen, val_loader, epochs, folder=Results)
         
         if Config.save_model and epochs %25 == 0:
