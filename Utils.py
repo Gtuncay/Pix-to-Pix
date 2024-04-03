@@ -2,7 +2,7 @@ import torch
 import Config as Config
 from torchvision.utils import save_image
 import os
-Results = "Results/MixedL150/GeneratorOutput/" #Change here depending on what kind of corruption you are fixing
+Results = "Results/MixedL150/GeneratorOutput/" 
 from Dataset import SchlierenDataset
 flag = False
 
