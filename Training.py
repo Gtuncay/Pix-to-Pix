@@ -61,7 +61,7 @@ def main():
     global val_loader 
     disc = Discriminator(input_channels = 1).to(Config.DEVICE)
     gen = Generator(input_channels = 1).to(Config.DEVICE)
-    opt_disc = optim.Adam(disc.parameters(), lr = Config.lr, betas = (0.5, 0.999)) #maybe adjust here
+    opt_disc = optim.Adam(disc.parameters(), lr = Config.lr, betas = (0.5, 0.999)) 
     opt_gen = optim.Adam(gen.parameters(), lr = Config.lr, betas = (0.5, 0.999))
     #Loss
     BCE = nn.BCEWithLogitsLoss()
